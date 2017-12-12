@@ -62,7 +62,7 @@ class Monitor extends Component {
         this.initSession();
         break;
       case MONITOR_STEPS.PLANNING:
-        if (this.areTasksValid(this.state.planningPanelChanges.tasks)) this.startSession();
+        if (this.areTasksValid(this.props.tasks)) this.startSession();
         break;
       case MONITOR_STEPS.WORKFLOW:
         this.goToNextTask();
@@ -86,7 +86,7 @@ class Monitor extends Component {
     });
   }
   startSession = () => {
-    this.props.startSession(this.state.planningPanelChanges.tasks);
+    this.props.startSession(this.state.planningPanelChanges.tasks, this.state.planningPanelChanges.title);
     this.startTask();
   }
   goToNextTask = () => {
@@ -104,7 +104,7 @@ class Monitor extends Component {
   isCenterButtonDisabled = () => {
     switch (this.props.step) {
       case MONITOR_STEPS.PLANNING:
-        return !this.areTasksValid(this.state.planningPanelChanges.tasks) || this.props.dateLastPause;
+        return !this.areTasksValid(this.props.tasks) || this.props.dateLastPause;
       case MONITOR_STEPS.WORKFLOW:
         return this.props.dateLastPause;
       default:
@@ -166,7 +166,7 @@ const mapStateToProps = state => {
   return {
     isSessionPaused: state.MonitorReducers.isSessionPaused,
     step: state.MonitorReducers.currentStep,
-    tasks: state.MonitorReducers.tasks,
+    tasks: state.PlanningPanelReducers.tasks,
     currentTaskIndex: state.MonitorReducers.currentTaskIndex,
     results: state.MonitorReducers.results,
     taskChrono: state.MonitorReducers.taskChrono,
